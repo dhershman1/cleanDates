@@ -1,74 +1,62 @@
-cleanDateWithMoment
-===============================
+A simple recursive date formatter that uses moment.
 
-A simple object of methods that allow you to clean a single date or an object filled with dates. 
+## How To
 
-Uses recursive looping in order to hit any prop you need, even if theres more objects inside of your current object.
-
-
-##Dependency: 
-###Moment.js -Used to format dates
-
-## Object
-The object acts as a simple holder for the list of function methods that can be called.
-```js
-var cleanDateWithMoment = {};
+```
+npm i -S dateprettify
 ```
 
-## Functions
-
-### cleanOneAttribute
-
-This function can clean single dates if needed or there is no desire to involve moment as a dependency for the project
-
-##### Usage
-This function simply takes two strings a date and a format then formats the string.
-
->Example:
-
 ```js
-	cleanDateWithMoment.cleanOneAttribute('2015-03-05 00:00:00.0', 'MM/DD/YY');
+var datePrettify = require('dateprettify');
 ```
 
-##### Arguments
-- `date` - string that contains a unformatted date
-- `format` - the way you wish the date to be formatted (see moments docs for which formats are accepted)
-
-### deepClean
-
-This function is able to recursively iterate through an array of objects that would likely contain more arrays with objects inside of it that require date formatting.
-
-##### Usage
-The function takes an array of objects, a key to search for, and a format to follow.
-
->Example:
-
+##Usage
 ```js
-	cleanDateWithMoment.deepClean([{text: 'Tesing prop', testdate: '2015-03-05 00:00:00.0'}], 'testdate', 'MM/DD/YY');
+var datePrettify = require('dateprettify');
+var date = datePrettify.singleClean('09-12-04', 'MMM DD, YYY');
+// date would output Sep 12, 2004
 ```
 
->##### Steps
-The function starts up a for loop on the array which will loop through your objects searching for the key entered and then formats within this for loop we also want to start looping the object with a for in loop.
+##Methods
 
->Example:
-```js
-	for (i; i < len; i++) {
-				for (prop in items[i]) { }
-			}
-```
-As we loop through our object we need to validate our values and make sure we iterate through everything even if a date is found on our first layer.
+###singleClean
+Cleans a single string value sent to it to the format of choosing (just here for optional cases really)
+Example usage above
 
->Example:
+###deepClean
+Recursively loops through a object or array until the end and corrects all of the data properties you specify to the desired format.
+
+####Usage
 ```js
-	if (items[i].hasOwnProperty(prop) && prop === key) {
-		items[i][prop] = moment(items[i][prop]).format(format);
-	} else if (items[i].hasOwnProperty(prop) && typeof items[i][prop] === 'object'){
-		items[i][prop] = this.deepClean(items[i][prop], key, format);
+var datePrettify = require('dateprettify');
+var dateObj = {
+	date1: '12/11/09',
+	dateArrOfObjs: [{
+		date2: '24/07/10'
+		}],
+	dateObj: {
+		dateinObj1: '04/19/14',
+		dateinObj2: '09/18/12'.
+		dateObj2: {
+			testerDate: '14/05/10'
+		}
 	}
+};
+var newDateObj = datePrettify(dateObj, ['date1', 'date2', 'dateinObj1', 'dateinObj2', 'testerdate'], 'MM-DD-YYYY');
+// newDateObj would output
+/*
+{
+	date1: '12-11-2009',
+	dateArrOfObjs: [{
+		date2: '07-24-2010'
+		}],
+	dateObj: {
+		dateinObj1: '04-19-2014',
+		dateinObj2: '09-18-2012'.
+		dateObj2: {
+			testerDate: '05-14-2010'
+		}
+	}
+}
+ */ 
 ```
-Once this is all said and done the utility will then return the same array back to the user however it will now contain the formatted dates instead.
-
-##### Arguments
-- `date` - string that contains a unformatted date
-- `key` - string that contains a object property name to search for
-- `format` - the way you wish the date to be formatted (see moments docs for which formats are accepted)

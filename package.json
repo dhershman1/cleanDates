@@ -1,0 +1,27 @@
+{
+  "name": "dateprettify",
+  "version": "0.1.0",
+  "description": "Simple Date Formatter using moment",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhershman1/dateprettify.git"
+  },
+  "keywords": [
+    "dates",
+    "prettify",
+    "moment"
+  ],
+  "author": "Dustin Hershman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhershman1/dateprettify/issues"
+  },
+  "homepage": "https://github.com/dhershman1/dateprettify#readme",
+  "dependencies": {
+    "moment": "^2.13.0"
+  }
+}
