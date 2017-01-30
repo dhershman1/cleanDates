@@ -1,6 +1,6 @@
 {
   "name": "dateprettify",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Simple Date Formatter using moment",
   "main": "lib/index.js",
   "scripts": {
@@ -8,12 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dhershman1/dateprettify.git"
+    "url": "https://github.com/dhershman1/dateprettify.git"
   },
   "keywords": [
     "dates",
     "prettify",
-    "moment"
+    "moment",
+    "formatting"
   ],
   "author": "Dustin Hershman",
   "license": "ISC",

@@ -7,42 +7,46 @@ npm i -S dateprettify
 ```
 
 ```js
-var datePrettify = require('dateprettify');
+const datePrettify = require('dateprettify');
 ```
 
-##Usage
+## Usage
+#### Format single date
 ```js
-var datePrettify = require('dateprettify');
-var date = datePrettify.singleClean('09-12-04', 'MMM DD, YYY');
-// date would output Sep 12, 2004
+const datePrettify = require('dateprettify');
+let date = datePrettify(new Date('12/10/2016'), 'MMM Do, YYYY');
+// date output: Dec 10th, 2016
+
+// You can also just send a string the said string is created into a new date object by datePrettify
+// And then formatted as desired
+let date = datePrettify('12/10/2016', 'MMM Do, YYYY');
+// date output: Dec 10th, 2016
 ```
 
-##Methods
-
-###singleClean
-Cleans a single string value sent to it to the format of choosing (just here for optional cases really)
-Example usage above
-
-###deepClean
-Recursively loops through a object or array until the end and corrects all of the data properties you specify to the desired format.
-
-####Usage
+#### Format array of dates
 ```js
-var datePrettify = require('dateprettify');
-var dateObj = {
+const datePrettify = require('dateprettify');
+let dateArr = [new Date('12/31/2016'), '1/30/2017'];
+let newDateArr = datePrettify(dateArr, 'MM.DD.YY');
+// newDateArr output: ['12.31.16', '1.30.17']
+```
+
+#### Format objects recursively
+In order to format an object, you need to also send an array of keys you'd like datePrettify to look for.
+```js
+const datePrettify = require('dateprettify');
+let dateObj = {
 	date1: '12/11/09',
 	dateArrOfObjs: [{
-		date2: '24/07/10'
-		}],
+		date2: '2010/7/24'
+	}],
 	dateObj: {
-		dateinObj1: '04/19/14',
-		dateinObj2: '09/18/12'.
 		dateObj2: {
-			testerDate: '14/05/10'
+			testerDate: '10/05/2016'
 		}
 	}
 };
-var newDateObj = datePrettify(dateObj, ['date1', 'date2', 'dateinObj1', 'dateinObj2', 'testerdate'], 'MM-DD-YYYY');
+let newDateObj = datePrettify(dateObj, 'MM-DD-YYYY', ['date1', 'date2', 'testerDate']);
 // newDateObj would output
 /*
 {
@@ -51,12 +55,14 @@ var newDateObj = datePrettify(dateObj, ['date1', 'date2', 'dateinObj1', 'dateinO
 		date2: '07-24-2010'
 		}],
 	dateObj: {
-		dateinObj1: '04-19-2014',
-		dateinObj2: '09-18-2012'.
 		dateObj2: {
-			testerDate: '05-14-2010'
+			testerDate: '10-05-2016'
 		}
 	}
 }
- */ 
+ */
 ```
+## Running Tests
+To Run the tests go to the dateprettify directory and run `npm i`
+
+After the install finishes run `npm test`
