@@ -1,34 +1,28 @@
-/**
- * @overview Uses moment to clean up dates
- * @author Dustin Hershman
- * @version 1.0.0
- */
+var moment = require('moment');
 
-const moment = require('moment');
-
-function datePrettify(dates, format, attr) {
-	const useFormat = format || 'MM-DD-YYYY';
+function datePrettify(format) {
+	var useFormat = format || 'MM-DD-YYYY';
 
 	function clean(item) {
-		const date = (typeof item !== 'object') ? new Date(item) : item;
+		var date = (typeof item !== 'object') ? new Date(item) : item;
 
 		return moment(date).format(useFormat);
 	}
 
 	function cleanArray(dateArr) {
-		let results = [];
-		let len = dateArr.length;
-		let i = 0;
+		var cleaned = [];
+		var len = dateArr.length;
+		var i = 0;
 
 		for (i; i < len; i++) {
-			results.push(clean(dateArr[i]));
+			cleaned.push(clean(dateArr[i]));
 		}
 
-		return results;
+		return cleaned;
 	}
 
 	function deepClean(items, keys) {
-		let prop = '';
+		var prop = '';
 
 		for (prop in items) {
 			if (items.hasOwnProperty(prop) && keys.includes(prop)) {
@@ -41,23 +35,12 @@ function datePrettify(dates, format, attr) {
 		return items;
 	}
 
-	function init() {
-		let results = null;
-
-		if (attr) {
-			results = deepClean(dates, attr);
-		} else if (dates.length && typeof dates !== 'string') {
-			results = cleanArray(dates);
-		} else {
-			results = clean(dates);
-		}
-
-		return results;
-	}
-
-	return init();
+	return {
+		deepClean: deepClean,
+		cleanArray: cleanArray,
+		clean: clean
+	};
 
 }
 
 module.exports = datePrettify;
-

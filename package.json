@@ -1,6 +1,6 @@
 {
   "name": "dateprettify",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Simple Date Formatter using moment",
   "main": "index.js",
   "scripts": {
