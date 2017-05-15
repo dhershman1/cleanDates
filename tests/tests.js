@@ -14,6 +14,15 @@ const dateObj = {
 	}
 };
 
+test('Test new formatter', t => {
+	let results = datePrettify({format: 'DDD MMM Dz, YYYY'}).runFormat(new Date());
+
+	console.log(results);
+	t.ok(results);
+	t.end();
+});
+
+/*
 test('Test single Clean with defaults\n', t => {
 	let results = datePrettify().clean(dateObj.date1);
 
@@ -44,3 +53,4 @@ test('Test deepClean Object\n', t => {
 	t.equal(results.dateArrOfObjs[0].date2, '07-24-2010', 'Formatted the object in an array');
 	t.equal(results.dateObj.dateObj2.testerDate, '10-05-2016', 'Formatted the object within an object date');
 });
+*/

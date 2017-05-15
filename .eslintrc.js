@@ -52,7 +52,7 @@ module.exports = {
 		'block-scoped-var': 'error',
 		'class-methods-use-this': 'error',
 		'complexity': ['error', {
-			'max': 3
+			'max': 4
 		}],
 		'consistent-return': 'error',
 		'curly': ['error', 'multi-line'],
