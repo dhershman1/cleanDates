@@ -1,16 +1,9 @@
 # Date Prettify
 A simple recursive date formatter that uses moment.
 
-#### Changelog
-> **v1.1.0**
-> - Removed ES6 based code since this is mainly a front end facing module
-> - Cleaned up usage should be less confusing now
-> - Code clean up
-> - Tests should fit accordingly
+## Changelog
 
-## Parameters
-
-- `format` - `String`: The date format you'd like to use. `Default: MM-DD-YYYY`
+You can check out the changelog here: https://github.com/dhershman1/dateprettify/blob/master/changelog.md
 
 ## How To
 
@@ -18,67 +11,103 @@ A simple recursive date formatter that uses moment.
 npm i -S dateprettify
 ```
 
+Using Standard Module System
+```js
+import {clean, cleanArray, deepClean} from 'dateprettify';
+```
+
+Using Common JS
 ```js
 var datePrettify = require('dateprettify');
 ```
 
-## Usage
-```js
-var datePrettify = require('dateprettify');
-var date = datePrettify('MMM Do, YYYY').clean('12/11/09');
-// date output: Dec 11th, 2016
+Using in the browser
+```
+<script src="path/to/dateprettify/dist/dateprettify.umd.js"></scipts>
+dateprettify.method();
+```
 
+## Usage
+
+```js
+import {clean, cleanArray, deepClean} from 'dateprettify';
+date = clean('12/11/09', 'MMM Do, YYYY');
+// date output: Dec 11th, 2009
+date = cleanArray(['12/11/09'], 'MMM Do, YYYY');
+// date output: ['Dec 11th, 2009']
+date = deepClean({item: {date: '12/11/09'}}, 'MMM Do, YYYY');
+// date output: {item: {date: 'Dec 11th, 2009'}}
 ```
 
 ## Methods
 
-### clean(item)
-Clean single date
+### setFormat(format)
 
-#### Parameters
+Set a persistant format you'd like to use to the module **NOTE: The Format parameter on each method will overrule the persistant format set**
 
-- `item` - `String|Date Object`: the date you want cleaned
+#### Argumments
+
+- `format` - `String`: The moment style format you want applied
 
 #### Usage
 
 ```js
-var datePrettify = require('dateprettify')();
-var cleanDate = datePrettify.clean('2010/7/24');
+import {setFormat, clean} from 'dateprettify';
+setFormat('MMM Do, YYYY');
+const date = clean('12/11/09');
+// date output: Dec 11th, 2009
+// However using the format param of a method will override the persistant format
+const cleanDate = clean('12/11/09', 'MM.DD.YY');
+// Output: 12.11.09
+```
+
+### clean(item, format)
+Clean single date
+
+#### Argumments
+
+- `item` - `String|Date Object`: the date you want cleaned
+- `format` - `String`: The moment style format you want applied `Optional`
+
+#### Usage
+
+```js
+import {clean} from 'dateprettify'
+var cleanDate = clean('2010/7/24');
 // Output: 07-24-2010
 ```
 
-### cleanArray(array)
+### cleanArray(array, format)
 Clean an array of dates
 
-#### Parameters
+#### Argumments
 
 - `array` - `Array`: An array of date strings or objects
+- `format` - `String`: The moment style format you want applied `Optional`
 
 #### Usage
 
 ```js
-var datePrettify = require('dateprettify')('MM.DD.YY');
-var newDateArr = datePrettify.cleanArray([new Date('12/31/2016'), '1/30/2017']);
-// OR
-var datePrettify = require('dateprettify')
-var newDateArr = datePrettify('MM.DD.YY').cleanArray([new Date('12/31/2016'), '1/30/2017']);
-
-// newDateArr output: ['12.31.16', '1.30.17']
+import {setFormat, cleanArray} from 'dateprettify';
+setFormat('MM.DD.YY');
+const cleanDate = cleanArray([new Date('12/31/2016'), '1/30/2017']);
+// Output: ['12.31.16', '1.30.17']
 ```
 
-### deepClean(items, keys)
+### deepClean(items, keys, format)
 Recursively clean an object handles single dates, arrays of dates, and more date objects inside your main object
 
-#### Parameters
+#### Argumments
 
 - `items` - `Object`: Your object to search through
 - `keys` - `Array`: Array of strings with key names you want `deepClean` to look for
+- `format` - `String`: The moment style format you want applied `Optional`
 
 #### Usage
 
 ```js
-var datePrettify = require('dateprettify');
-var dateObj = {
+import {deepClean} from 'datePrettify';
+dateObj = {
 	date1: '12/11/09',
 	dateArrOfObjs: [{
 		date2: '2010/7/24'
@@ -90,8 +119,8 @@ var dateObj = {
 		}
 	}
 };
-var cleanObj = datePrettify().deepClean(dateObj, ['date1', 'date2', 'testerDate', 'dateArr']);
-// cleanObj would output
+cleanObj = deepClean(dateObj, ['date1', 'date2', 'testerDate', 'dateArr']);
+// Output:
 /*
 {
 	date1: '12-11-2009',
@@ -107,7 +136,3 @@ var cleanObj = datePrettify().deepClean(dateObj, ['date1', 'date2', 'testerDate'
 }
  */
 ```
-## Running Tests
-To Run the tests go to the dateprettify directory and run `npm i`
-
-After the install finishes run `npm test`

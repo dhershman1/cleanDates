@@ -150,7 +150,7 @@ module.exports = {
 		'block-spacing': 'off',
 		'brace-style': ['error', '1tbs'],
 		'camelcase': 'error',
-		'capitalized-comments': 'error',
+		'capitalized-comments': 'warn',
 		'comma-dangle': 'error',
 		'comma-spacing': 'error',
 		'comma-style': 'error',

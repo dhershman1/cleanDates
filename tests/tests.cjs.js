@@ -1,10 +1,49 @@
-import test from 'tape';
-import {
-	setFormat,
-	clean,
-	cleanArray,
-	deepClean
-} from '../index.js';
+'use strict';
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var test = _interopDefault(require('tape'));
+var moment = _interopDefault(require('moment'));
+
+let globalFormat = 'MM-DD-YYYY';
+
+const clone = (items) => {
+	return JSON.parse(JSON.stringify(items));
+};
+
+const setFormat = (format) => {
+	globalFormat = format;
+};
+
+const clean = (item, format) => {
+	const useFormat = format || globalFormat;
+	const date = (typeof item !== 'object') ? new Date(item) : item;
+
+	return moment(date).format(useFormat);
+};
+
+const cleanArray = (dateArr, format) => {
+
+	return dateArr.map(dateItem => clean(dateItem, format));
+};
+
+const deepCleaner = (dates, keys, format) => {
+	for (let prop in dates) {
+		if (Object.prototype.hasOwnProperty.call(dates, prop) && keys.indexOf(prop) !== -1) {
+			dates[prop] = clean(dates[prop], format);
+		} else if (typeof dates[prop] === 'object') {
+			deepCleaner(dates[prop], keys, format);
+		}
+	}
+
+	return dates;
+};
+
+const deepClean = (dates, keys, format) => {
+	const cloneDates = clone(dates);
+
+	return deepCleaner(cloneDates, keys, format);
+};
 
 // Test Data
 const dateObj = {

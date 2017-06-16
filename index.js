@@ -1,85 +1,41 @@
-var moment = require('moment');
-var formatDate = require('./src/format');
+import moment from 'moment';
 
-function extend() {
-	var extended = {};
-	var key = '';
-	var prop = '';
-	var arg = '';
+let globalFormat = 'MM-DD-YYYY';
 
-	for (key in arguments) {
-		arg = arguments[key];
+const clone = (items) => {
+	return JSON.parse(JSON.stringify(items));
+};
 
-		for (prop in arg) {
-			if (Object.prototype.hasOwnProperty.call(arg, prop)) {
-				extended[prop] = arg[prop];
-			}
+export const setFormat = (format) => {
+	globalFormat = format;
+};
+
+export const clean = (item, format) => {
+	const useFormat = format || globalFormat;
+	const date = (typeof item !== 'object') ? new Date(item) : item;
+
+	return moment(date).format(useFormat);
+};
+
+export const cleanArray = (dateArr, format) => {
+
+	return dateArr.map(dateItem => clean(dateItem, format));
+};
+
+const deepCleaner = (dates, keys, format) => {
+	for (let prop in dates) {
+		if (Object.prototype.hasOwnProperty.call(dates, prop) && keys.indexOf(prop) !== -1) {
+			dates[prop] = clean(dates[prop], format);
+		} else if (typeof dates[prop] === 'object') {
+			deepCleaner(dates[prop], keys, format);
 		}
 	}
 
-	return extended;
-}
+	return dates;
+};
 
+export const deepClean = (dates, keys, format) => {
+	const cloneDates = clone(dates);
 
-function datePrettify(options) {
-	var defaults = {
-		format: 'MM-DD-YYYY',
-		months: [
-			'January', 'February', 'March',
-			'April', 'May', 'June', 'July',
-			'August', 'September', 'October',
-			'November', 'December'
-		],
-		shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-		days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-		shortDays: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
-	};
-	var opts = extend({}, defaults, options);
-
-	function runFormat(date) {
-		return formatDate(date, opts);
-	}
-
-	function clean(item) {
-		var date = (typeof item !== 'object') ? new Date(item) : item;
-
-		return date;
-		// return moment(date).format(useFormat);
-	}
-
-	function cleanArray(dateArr) {
-		var cleaned = [];
-		var len = dateArr.length;
-		var i = 0;
-
-		for (i; i < len; i++) {
-			cleaned.push(clean(dateArr[i]));
-		}
-
-		return cleaned;
-	}
-
-	function deepClean(items, keys) {
-		var prop = '';
-
-		for (prop in items) {
-			if (items.hasOwnProperty(prop) && keys.includes(prop)) {
-				items[prop] = clean(items[prop]);
-			} else if (typeof items[prop] === 'object') {
-				deepClean(items[prop], keys);
-			}
-		}
-
-		return items;
-	}
-
-	return {
-		runFormat: runFormat,
-		deepClean: deepClean,
-		cleanArray: cleanArray,
-		clean: clean
-	};
-
-}
-
-module.exports = datePrettify;
+	return deepCleaner(cloneDates, keys, format);
+};
