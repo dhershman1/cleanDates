@@ -1,9 +1,18 @@
 # Changelog
 
+## v2.0.0
+
+> - Dropped `setFormat` since it's no longer needed
+> - Changed back to a factory function setup
+> - Swapped out `moment` in favor of `date-fns` since it's modular and isn't huge
+> - Using `format` from `date-fns` instead of calling local functions so we can pass a step
+> - Updated all dependencies to latest
+> - Code clean up and optimizations
+
 ## v1.2.0
 
 > - Standardized Module System
-> - `deepClean` no longer mutates objects
+> - `deepClean` no longer mutates
 > - Now supports IE 9+
 > - Added UMD support
 > - Cleaned up Syntax

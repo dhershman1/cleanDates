@@ -1,5 +1,6 @@
 # Date Prettify
-A simple recursive date formatter that uses moment.
+
+A silly small date formatter with recursive abilities to format deep objects without mutating them
 
 ## Changelog
 
@@ -13,12 +14,15 @@ npm i -S dateprettify
 
 Using Standard Module System
 ```js
-import {clean, cleanArray, deepClean} from 'dateprettify';
+import prettyDate from 'dateprettify';
+
+const {clean, cleanArray, deepClean} = prettyDate();
 ```
 
 Using Common JS
 ```js
-var datePrettify = require('dateprettify');
+var prettyDate = require('dateprettify')();
+prettyDate.method();
 ```
 
 Using in the browser
@@ -29,84 +33,85 @@ dateprettify.method();
 
 ## Usage
 
+**Important Formats now Follow date-fns formatting which can be seen here** https://date-fns.org/v1.29.0/docs/format
+
+Importing dateprettify brings in an object which is then used either as a chain, or can be destructured
+
+The main function now accepts a param that can be your desired format
+
 ```js
-import {clean, cleanArray, deepClean} from 'dateprettify';
-date = clean('12/11/09', 'MMM Do, YYYY');
+import prettyDate from 'dateprettify';
+
+const {clean, cleanArray, deepClean} = prettyDate('MMM Do, YYYY');
+// The default format if one is not passed in is MM-DD-YYYY
+
+date = clean('12/11/09');
 // date output: Dec 11th, 2009
-date = cleanArray(['12/11/09'], 'MMM Do, YYYY');
+date = cleanArray(['12/11/09']);
 // date output: ['Dec 11th, 2009']
-date = deepClean({item: {date: '12/11/09'}}, 'MMM Do, YYYY');
+date = deepClean({item: {date: '12/11/09'}});
 // date output: {item: {date: 'Dec 11th, 2009'}}
+
+// An override format is also passible to each method
+date = clean('12/11/09', 'MM D, YY');
+// output: 12 11, 09
+
 ```
 
 ## Methods
 
-### setFormat(format)
-
-Set a persistant format you'd like to use to the module **NOTE: The Format parameter on each method will overrule the persistant format set**
-
-#### Argumments
-
-- `format` - `String`: The moment style format you want applied
-
-#### Usage
-
-```js
-import {setFormat, clean} from 'dateprettify';
-setFormat('MMM Do, YYYY');
-const date = clean('12/11/09');
-// date output: Dec 11th, 2009
-// However using the format param of a method will override the persistant format
-const cleanDate = clean('12/11/09', 'MM.DD.YY');
-// Output: 12.11.09
-```
-
-### clean(item, format)
+### clean(date, oFormat)
 Clean single date
 
 #### Argumments
 
-- `item` - `String|Date Object`: the date you want cleaned
-- `format` - `String`: The moment style format you want applied `Optional`
+- `date` - `String|Date Object`: the date you want cleaned
+- `oFormat` - `String`: This will override the format set by the factory function `Optional`
 
 #### Usage
 
 ```js
-import {clean} from 'dateprettify'
-var cleanDate = clean('2010/7/24');
+import prettyDate from 'dateprettify';
+
+const {clean} = prettyDate();
+
+clean('07/24/2010');
 // Output: 07-24-2010
 ```
 
-### cleanArray(array, format)
+### cleanArray(dateArr, oFormat)
 Clean an array of dates
 
 #### Argumments
 
-- `array` - `Array`: An array of date strings or objects
-- `format` - `String`: The moment style format you want applied `Optional`
+- `dateArr` - `Array`: An array of date strings or objects
+- `oFormat` - `String`: This will override the format set by the factory function `Optional`
 
 #### Usage
 
 ```js
-import {setFormat, cleanArray} from 'dateprettify';
-setFormat('MM.DD.YY');
+import prettyDate from 'dateprettify';
+
+const { cleanArray } = prettyDate('MM.DD.YY');
 const cleanDate = cleanArray([new Date('12/31/2016'), '1/30/2017']);
 // Output: ['12.31.16', '1.30.17']
 ```
 
-### deepClean(items, keys, format)
+### deepClean(obj, keys, oFormat)
 Recursively clean an object handles single dates, arrays of dates, and more date objects inside your main object
 
 #### Argumments
 
-- `items` - `Object`: Your object to search through
+- `obj` - `Object`: Your object to search through
 - `keys` - `Array`: Array of strings with key names you want `deepClean` to look for
-- `format` - `String`: The moment style format you want applied `Optional`
+- `oFormat` - `String`: This will override the format set by the factory function `Optional`
 
 #### Usage
 
 ```js
-import {deepClean} from 'datePrettify';
+import prettyDate from 'dateprettify';
+
+const { deepClean } = prettyDate();
 dateObj = {
 	date1: '12/11/09',
 	dateArrOfObjs: [{

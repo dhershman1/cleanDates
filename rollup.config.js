@@ -1,17 +1,19 @@
-import uglify from 'rollup-plugin-uglify';
 import buble from 'rollup-plugin-buble';
+import uglify from 'rollup-plugin-uglify';
 
 export default {
-	entry: 'index.js',
-	moduleName: 'dateprettify',
-	format: 'umd',
+	input: 'src/index.js',
+	name: 'dateprettify',
+	output: {
+		format: 'umd',
+		file: 'dist/dateprettify.umd.js'
+	},
 	plugins: [
 		buble(),
 		uglify()
 	],
-	dest: 'dist/dateprettify.umd.js',
-	external: [ 'moment' ],
+	external: ['date-fns/format'],
 	globals: {
-		moment: 'moment'
+		'date-fns/format': 'format'
 	}
 };
